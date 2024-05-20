@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -18,7 +20,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [EventController::class, 'index' ])->name('dashboard');
+    Route::post('/evento', [EventController::class, 'store'])->name('event.store')->middleware([HandlePrecognitiveRequests::class]);
+
 });
